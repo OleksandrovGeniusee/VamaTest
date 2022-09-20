@@ -25,4 +25,8 @@ val networkModule
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
         }
+
+        single {
+            get<Retrofit>().create(API::class.java)
+        }
     }

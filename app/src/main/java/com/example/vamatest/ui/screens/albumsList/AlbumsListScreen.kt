@@ -9,9 +9,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.vamatest.ui.theme.VamaTestTheme
+import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun AlbumsListScreen(onAlbumPressed: () -> Unit) {
+
+    val viewModel = getViewModel<AlbumsListViewModel>()
+
     AlbumsList(onAlbumPressed = onAlbumPressed)
 }
 
