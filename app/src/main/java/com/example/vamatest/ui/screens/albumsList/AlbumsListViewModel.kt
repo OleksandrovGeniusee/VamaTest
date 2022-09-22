@@ -1,6 +1,5 @@
 package com.example.vamatest.ui.screens.albumsList
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -12,14 +11,20 @@ import kotlinx.coroutines.launch
 
 class AlbumsListViewModel(private val albumRepositoryImpl: AlbumRepository) : BaseViewModel() {
 
+    val isRefreshing: LiveData<Boolean>
+        get() = isRefreshingLiveData
+
     val albumsList: LiveData<List<Album>>
         get() = albumsListLiveData
 
     private var albumsListLiveData: MutableLiveData<List<Album>> = MutableLiveData()
+    private var isRefreshingLiveData: MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun getAlbums() {
         this.viewModelScope.launch(Dispatchers.IO) {
+            isRefreshingLiveData.postValue(true)
             albumsListLiveData.postValue(albumRepositoryImpl.getAlbums())
+            isRefreshingLiveData.postValue(false)
         }
     }
 }

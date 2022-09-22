@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Vama Test</string>
+
+    <string name="top_hundred_albums">Top 100 Albums</string>
+    <string name="released">Released %s</string>
+    <string name="visit_the_album">Visit The Album</string>
+    <string name="retry">Retry</string>
+    <string name="bad_internet_connection_text">Uh oh! We are having an issue connecting. Please try again.</string>
 </resources>

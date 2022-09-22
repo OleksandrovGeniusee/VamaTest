@@ -7,5 +7,12 @@ data class MostPlayedResponse(
 )
 
 data class Feed(
+    @SerializedName("copyright") val copyright: String,
     @SerializedName("results") val results: List<Album>,
+)
+
+data class Gener(
+    @SerializedName("genreId") val genreId: String,
+    @SerializedName("name") val name: String,
+    @SerializedName("url") val url: String,
 )

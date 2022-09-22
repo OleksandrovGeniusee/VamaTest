@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.vamatest"
@@ -49,7 +49,7 @@ dependencies {
     implementation project(path: ':data')
     implementation project(path: ':domain')
 
-    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.core:core-ktx:1.8.0'
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
@@ -61,6 +61,7 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+    implementation "androidx.compose.runtime:runtime-livedata:1.1.1"
 
     // Koin
     def koin_version= "3.2.0"
@@ -72,4 +73,17 @@ dependencies {
     // Android navigation
     def nav_version = "2.5.2"
     implementation "androidx.navigation:navigation-compose:$nav_version"
+
+    // Coil
+    implementation 'io.coil-kt:coil-compose:2.2.1'
+
+    // Material 3
+    implementation "androidx.compose.material3:material3:1.0.0-beta02"
+    implementation "androidx.compose.material3:material3-window-size-class:1.0.0-beta02"
+
+    // Full screen
+    implementation "com.google.accompanist:accompanist-insets:0.14.0"
+
+    // Swipe refresh
+    implementation "com.google.accompanist:accompanist-swiperefresh:0.24.9-beta"
 }
