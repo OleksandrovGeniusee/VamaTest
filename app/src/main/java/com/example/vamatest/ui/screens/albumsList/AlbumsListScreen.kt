@@ -1,9 +1,12 @@
 package com.example.vamatest.ui.screens.albumsList
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,7 +29,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.example.vamatest.R
 import com.example.vamatest.ui.common.ClickableItemsGrid
 import com.example.vamatest.ui.theme.VamaTestTheme
@@ -56,7 +62,11 @@ private fun AlbumsList(
 ) {
     val viewModel = getViewModel<AlbumsListViewModel>()
     val isRefreshing by viewModel.loading.observeAsState()
+    val error by viewModel.error.observeAsState()
 
+    if (error != null) {
+        ErrorView()
+    }
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.Start
@@ -102,37 +112,49 @@ private fun AlbumsList(
 private fun ErrorView() {
     val viewModel = getViewModel<AlbumsListViewModel>()
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+    Dialog(
+        onDismissRequest = {
+            viewModel.cleanError()
+        },
+        DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true)
     ) {
-        androidx.compose.material.Text(
-            text = stringResource(id = R.string.bad_internet_connection_text),
-            modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.margin_item_space_default)),
-            textAlign = TextAlign.Center,
-            style = TextStyle(
-                fontSize = 34.sp,
-                fontWeight = FontWeight.Normal,
-                color = colorResource(id = R.color.album_artist_name_list)
-            )
-        )
-        Button(
-            modifier = Modifier.padding(top = dimensionResource(id = R.dimen.margin_item_space_extra_big)),
-            onClick = {
-                viewModel.getAlbums()
-            },
-            colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.bright_blue))
+        Column(
+            modifier = Modifier.wrapContentSize()
+                .background(
+                    color = colorResource(id = R.color.background),
+                    shape = RoundedCornerShape(8.dp)
+                ).padding(dimensionResource(id = R.dimen.margin_item_space_default)),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             androidx.compose.material.Text(
-                text = stringResource(id = R.string.retry),
+                text = stringResource(id = R.string.bad_internet_connection_text),
+                modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.margin_item_space_default)),
                 textAlign = TextAlign.Center,
                 style = TextStyle(
-                    fontSize = 16.sp,
+                    fontSize = 34.sp,
                     fontWeight = FontWeight.Normal,
-                    color = colorResource(id = R.color.album_name_list)
+                    color = colorResource(id = R.color.album_artist_name_list)
                 )
             )
+            Button(
+                modifier = Modifier.padding(top = dimensionResource(id = R.dimen.margin_item_space_extra_big)),
+                onClick = {
+                    viewModel.cleanError()
+                    viewModel.getAlbums()
+                },
+                colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.bright_blue))
+            ) {
+                androidx.compose.material.Text(
+                    text = stringResource(id = R.string.retry),
+                    textAlign = TextAlign.Center,
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Normal,
+                        color = colorResource(id = R.color.album_name_list)
+                    )
+                )
+            }
         }
     }
 }
