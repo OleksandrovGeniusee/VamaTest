@@ -29,7 +29,7 @@ fun AppNavigation() {
             route = Navigation.Route.ALBUMS_LIST
         ) {
             AlbumsListScreen {
-                it.id()?.let { it1 -> navController.toAlbumDetailsScreen(it1) }
+                navController.toAlbumDetailsScreen(it.id)
             }
         }
         composable(

@@ -1,4 +1,4 @@
-package com.vama.domain.albumDataSource
+package com.vama.data.albumDataSources
 
 interface AlbumRemoteDataSource<T> {
 

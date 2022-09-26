@@ -1,8 +1,8 @@
-package com.vama.domain.albumDataSource
+package com.vama.data.albumDataSources
 
 interface AlbumLocalDataSource<T> {
 
-    suspend fun getAlbums(): List<T>?
+    fun getAlbums(): List<T>?
 
     suspend fun getAlbumById(id: String): T?
 

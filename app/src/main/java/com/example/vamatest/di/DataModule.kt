@@ -2,10 +2,11 @@ package com.example.vamatest.di
 
 import com.vama.data.albumDataSources.AlbumLocalDataSourceImpl
 import com.vama.data.albumDataSources.AlbumRemoteDataSourceImpl
+import com.vama.data.albumDataSources.RealmConfig
 import org.koin.dsl.module
 
 val dataModule
     get() = module {
-        factory { AlbumLocalDataSourceImpl() }
+        single { AlbumLocalDataSourceImpl(RealmConfig.REALM) }
         factory { AlbumRemoteDataSourceImpl(get()) }
     }

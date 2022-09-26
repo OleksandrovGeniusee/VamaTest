@@ -2,6 +2,7 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'io.realm.kotlin'
+    id 'kotlinx-serialization'
 }
 
 android {
@@ -33,23 +34,24 @@ android {
 dependencies {
     implementation project(path: ':domain')
 
-    implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.6.1'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    implementation "androidx.core:core-ktx:$ktx_core"
+    implementation "androidx.appcompat:appcompat:$appcompat"
+    implementation "com.google.android.material:material:$material"
+    testImplementation "junit:junit:$junit"
+    androidTestImplementation "androidx.test.ext:junit:$junit_ext"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso"
 
     // Koin
-    def koin_version= "3.2.0"
     implementation "io.insert-koin:koin-android:$koin_version"
 
     // Networking
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.google.code.gson:gson:2.8.9'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit2"
+    implementation "com.google.code.gson:gson:$gson"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit2"
 
     // Database
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
-    implementation 'io.realm.kotlin:library-base:1.0.2'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$ktx_coroutines_core"
+    implementation "io.realm.kotlin:library-base:$realm"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$kt_serialization_json"
 }
