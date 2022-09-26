@@ -43,8 +43,9 @@ import com.example.vamatest.ui.theme.VamaTestTheme
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsHeight
 import com.vama.data.common.extensions.monthFirstFormat
-import com.vama.domain.Album
-import com.vama.domain.Gener
+import com.vama.data.mockedData.ALBUM
+import com.vama.domain.models.Album
+import com.vama.domain.models.Genre
 import org.koin.androidx.compose.getViewModel
 import java.util.*
 
@@ -73,23 +74,25 @@ private fun AlbumDetails(album: Album, modifier: Modifier, onBackPressed: () -> 
             verticalArrangement = Arrangement.Top
         ) {
             AsyncImage(
-                model = album.artworkUrl100,
+                model = album.artworkUrl100(),
                 contentDescription = null,
                 modifier = Modifier.fillMaxWidth()
             )
             ArtistAndAlbumNames(album = album)
-            GenersListView(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .padding(
-                        horizontal = dimensionResource(id = R.dimen.margin_item_space_default),
-                        vertical = dimensionResource(id = R.dimen.margin_item_space_extra_small)
-                    ),
-                genersList = album.genres
-            )
+            album.genres()?.let {
+                GenersListView(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(
+                            horizontal = dimensionResource(id = R.dimen.margin_item_space_default),
+                            vertical = dimensionResource(id = R.dimen.margin_item_space_extra_small)
+                        ),
+                    genersList = it
+                )
+            }
             BottomInfo(album = album)
-            CenteredButton(albumUrl = album.url)
+            album.albumUrl()?.let { CenteredButton(albumUrl = it) }
             Spacer(
                 modifier = Modifier
                     .navigationBarsHeight()
@@ -140,30 +143,34 @@ private fun CenteredButton(albumUrl: String) {
 
 @Composable
 private fun ArtistAndAlbumNames(album: Album) {
-    Text(
-        text = album.artistName,
-        maxLines = 2,
-        modifier = Modifier.padding(
-            start = dimensionResource(id = R.dimen.margin_item_space_default),
-            end = dimensionResource(id = R.dimen.margin_item_space_default),
-            top = dimensionResource(id = R.dimen.margin_item_space_small)
-        ),
-        style = TextStyle(
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Normal,
-            color = colorResource(id = R.color.album_artist_name_details)
+    album.artistName()?.let {
+        Text(
+            text = it,
+            maxLines = 2,
+            modifier = Modifier.padding(
+                start = dimensionResource(id = R.dimen.margin_item_space_default),
+                end = dimensionResource(id = R.dimen.margin_item_space_default),
+                top = dimensionResource(id = R.dimen.margin_item_space_small)
+            ),
+            style = TextStyle(
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Normal,
+                color = colorResource(id = R.color.album_artist_name_details)
+            )
         )
-    )
-    Text(
-        text = album.name,
-        maxLines = 2,
-        modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.margin_item_space_default)),
-        style = TextStyle(
-            fontSize = 34.sp,
-            fontWeight = FontWeight.ExtraBold,
-            color = colorResource(id = R.color.album_name_details)
+    }
+    album.albumName()?.let {
+        Text(
+            text = it,
+            maxLines = 2,
+            modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.margin_item_space_default)),
+            style = TextStyle(
+                fontSize = 34.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = colorResource(id = R.color.album_name_details)
+            )
         )
-    )
+    }
 }
 
 @Composable
@@ -171,10 +178,10 @@ private fun BottomInfo(album: Album) {
     BottomCommonText(
         stringResource(
             id = R.string.released,
-            album.release?.monthFirstFormat() ?: album.releaseDate
+            album.releaseDate()?.monthFirstFormat() ?: album.release() ?: ""
         )
     )
-    album.copyright?.let {
+    album.copyright()?.let {
         BottomCommonText(it)
     }
 }
@@ -196,7 +203,7 @@ private fun BottomCommonText(text: String) {
 }
 
 @Composable
-private fun GenersListView(modifier: Modifier, genersList: List<Gener>) {
+private fun GenersListView(modifier: Modifier, genersList: List<Genre>) {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(
@@ -205,12 +212,12 @@ private fun GenersListView(modifier: Modifier, genersList: List<Gener>) {
         ),
         verticalAlignment = Alignment.Top
     ) {
-        genersList.forEach { GenerText(generName = it.name) }
+        genersList.forEach { GenerText(gener = it) }
     }
 }
 
 @Composable
-private fun GenerText(generName: String) {
+private fun GenerText(gener: Genre) {
     Box(
         modifier = Modifier
             .border(
@@ -222,14 +229,16 @@ private fun GenerText(generName: String) {
             )
             .padding(start = 8.dp, top = 3.dp, end = 8.dp, bottom = 4.dp)
     ) {
-        Text(
-            text = generName,
-            style = TextStyle(
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Normal,
-                color = colorResource(id = R.color.bright_blue)
+        gener.name()?.let {
+            Text(
+                text = it,
+                style = TextStyle(
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = colorResource(id = R.color.bright_blue)
+                )
             )
-        )
+        }
     }
 }
 
@@ -265,32 +274,7 @@ private fun BackButton(modifier: Modifier, onClick: () -> Unit) {
 fun DefaultPreview() {
     VamaTestTheme {
         AlbumDetails(
-            album = Album(
-                id = "1622045624",
-                name = "Un Verano Sin Ti",
-                artistName = "Bad Bunny",
-                releaseDate = "2022-05-06",
-                kind = "albums",
-                artistId = "1126808565",
-                artistUrl = "https://music.apple.com/us/artist/bad-bunny/1126808565",
-                contentAdvisoryRating = "Explict",
-                artworkUrl100 = "https://is5-ssl.mzstatic.com/image/thumb/Music112/v4/3e/04/eb/3e04ebf6-370f-f59d-ec84-2c2643db92f1/196626945068.jpg/100x100bb.jpg",
-                genres = listOf(
-                    Gener(
-                        genreId = "id",
-                        name = "Hip Hop",
-                        url = "https://music.apple.com/us/artist/bad-bunny/1126808565"
-                    ),
-                    Gener(
-                        genreId = "id1",
-                        name = "Rap",
-                        url = "https://music.apple.com/us/artist/bad-bunny/1126808565"
-                    )
-                ),
-                url = "https://music.apple.com/us/album/un-verano-sin-ti/1622045624",
-                copyright = "Copyright © 2022 Apple Inc. All rights reserved.",
-                release = Date()
-            ),
+            album = ALBUM,
             modifier = Modifier.fillMaxSize()
         ) {}
     }

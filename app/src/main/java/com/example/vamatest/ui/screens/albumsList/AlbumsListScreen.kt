@@ -12,6 +12,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -31,7 +32,8 @@ import com.example.vamatest.ui.common.ClickableItemsGrid
 import com.example.vamatest.ui.theme.VamaTestTheme
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.vama.domain.Album
+import com.vama.data.mockedData.ALBUM
+import com.vama.domain.models.Album
 import org.koin.androidx.compose.getViewModel
 
 @ExperimentalMaterial3Api
@@ -39,7 +41,9 @@ import org.koin.androidx.compose.getViewModel
 fun AlbumsListScreen(onAlbumItemClicked: (Album) -> Unit) {
     val viewModel = getViewModel<AlbumsListViewModel>()
     val albums by viewModel.albumsList.observeAsState()
-    viewModel.getAlbums()
+    LaunchedEffect(Unit, block = {
+        viewModel.getAlbums()
+    })
 
     AlbumsList(albums = albums, onAlbumItemClicked = onAlbumItemClicked)
 }
@@ -51,7 +55,7 @@ private fun AlbumsList(
     onAlbumItemClicked: (Album) -> Unit
 ) {
     val viewModel = getViewModel<AlbumsListViewModel>()
-    val isRefreshing by viewModel.isRefreshing.observeAsState()
+    val isRefreshing by viewModel.loading.observeAsState()
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -139,22 +143,7 @@ private fun ErrorView() {
 fun DefaultPreview() {
     VamaTestTheme {
         AlbumsList(
-            listOf(
-                Album(
-                    id = "1622045624",
-                    name = "Un Verano Sin Ti",
-                    artistName = "Bad Bunny",
-                    releaseDate = "2022-05-06",
-                    kind = "albums",
-                    artistId = "1126808565",
-                    artistUrl = "https://music.apple.com/us/artist/bad-bunny/1126808565",
-                    contentAdvisoryRating = "Explict",
-                    artworkUrl100 = "https://is5-ssl.mzstatic.com/image/thumb/Music112/v4/3e/04/eb/3e04ebf6-370f-f59d-ec84-2c2643db92f1/196626945068.jpg/100x100bb.jpg",
-                    genres = listOf(),
-                    url = "https://music.apple.com/us/album/un-verano-sin-ti/1622045624",
-                    copyright = "Copyright © 2022 Apple Inc. All rights reserved."
-                )
-            ),
+            listOf(ALBUM),
             onAlbumItemClicked = {}
         )
     }

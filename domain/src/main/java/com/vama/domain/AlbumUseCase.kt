@@ -1,6 +1,6 @@
 package com.vama.domain
 
-interface AlbumUseCase {
+interface AlbumUseCase<T> {
 
-    suspend fun getAlbums(): List<Album>
+    suspend fun getAlbums(): List<T>
 }

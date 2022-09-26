@@ -1,6 +1,8 @@
 package com.vama.domain
 
-interface AlbumRepository {
+interface AlbumRepository<T> {
 
-    suspend fun getAlbums(): List<Album>
+    suspend fun getAlbumById(albumId: String): T?
+
+    suspend fun fetchAlbums()
 }

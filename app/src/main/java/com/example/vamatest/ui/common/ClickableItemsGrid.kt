@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.vamatest.R
 import com.example.vamatest.ui.theme.VamaTestTheme
-import com.vama.domain.Album
-import com.vama.domain.Gener
+import com.vama.data.mockedData.ALBUM
+import com.vama.domain.models.Album
 
 @Composable
 fun ClickableItemsGrid(
@@ -68,7 +68,7 @@ private fun AlbumItem(
             }
     ) {
         AsyncImage(
-            model = album.artworkUrl100,
+            model = album.artworkUrl100(),
             contentDescription = null,
             modifier = Modifier.size(dimensionResource(id = R.dimen.album_image_height))
                 .clip(RoundedCornerShape(dimensionResource(id = R.dimen.album_corner_radius)))
@@ -82,24 +82,28 @@ private fun AlbumItem(
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Bottom
         ) {
-            Text(
-                text = album.name,
-                maxLines = 2,
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = colorResource(id = R.color.album_name_list)
+            album.albumName()?.let {
+                Text(
+                    text = it,
+                    maxLines = 2,
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Normal,
+                        color = colorResource(id = R.color.album_name_list)
+                    )
                 )
-            )
-            Text(
-                text = album.artistName,
-                maxLines = 2,
-                style = TextStyle(
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = colorResource(id = R.color.album_artist_name_list)
+            }
+            album.artistName()?.let {
+                Text(
+                    text = it,
+                    maxLines = 2,
+                    style = TextStyle(
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Normal,
+                        color = colorResource(id = R.color.album_artist_name_list)
+                    )
                 )
-            )
+            }
         }
     }
 }
@@ -109,31 +113,7 @@ private fun AlbumItem(
 fun AlbumItemPreview() {
     VamaTestTheme {
         AlbumItem(
-            album = Album(
-                id = "1622045624",
-                name = "Un Verano Sin Ti",
-                artistName = "Bad Bunny",
-                releaseDate = "2022-05-06",
-                kind = "albums",
-                artistId = "1126808565",
-                artistUrl = "https://music.apple.com/us/artist/bad-bunny/1126808565",
-                contentAdvisoryRating = "Explict",
-                artworkUrl100 = "https://is5-ssl.mzstatic.com/image/thumb/Music112/v4/3e/04/eb/3e04ebf6-370f-f59d-ec84-2c2643db92f1/196626945068.jpg/100x100bb.jpg",
-                genres = listOf(
-                    Gener(
-                        genreId = "id",
-                        name = "Hip Hop",
-                        url = "https://music.apple.com/us/artist/bad-bunny/1126808565"
-                    ),
-                    Gener(
-                        genreId = "id1",
-                        name = "Rap",
-                        url = "https://music.apple.com/us/artist/bad-bunny/1126808565"
-                    )
-                ),
-                url = "https://music.apple.com/us/album/un-verano-sin-ti/1622045624",
-                copyright = "Copyright © 2022 Apple Inc. All rights reserved."
-            ),
+            album = ALBUM
         ) {}
     }
 }

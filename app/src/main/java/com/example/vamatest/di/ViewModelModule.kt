@@ -11,6 +11,6 @@ val viewModelModule
             AlbumsListViewModel(get())
         }
         viewModel {
-            AlbumDetailsViewModel()
+            AlbumDetailsViewModel(get())
         }
     }

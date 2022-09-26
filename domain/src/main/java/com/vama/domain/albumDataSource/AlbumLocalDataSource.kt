@@ -1,8 +1,10 @@
 package com.vama.domain.albumDataSource
 
-import com.vama.domain.Album
+interface AlbumLocalDataSource<T> {
 
-interface AlbumLocalDataSource {
+    suspend fun getAlbums(): List<T>?
 
-    suspend fun getAlbums(): List<Album>
+    suspend fun getAlbumById(id: String): T?
+
+    suspend fun saveAlbums(items: List<T>)
 }
