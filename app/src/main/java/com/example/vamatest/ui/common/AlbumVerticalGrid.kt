@@ -27,7 +27,7 @@ import coil.compose.AsyncImage
 import com.example.vamatest.R
 import com.example.vamatest.ui.theme.VamaTestTheme
 import com.vama.data.mockedData.ALBUM
-import com.vama.data.models.Album
+import com.vama.domain.models.Album
 
 @Composable
 fun AlbumVerticalGrid(

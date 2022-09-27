@@ -1,6 +1,6 @@
 package com.vama.data.mockedData
 
-import com.vama.data.models.Album
+import com.vama.domain.models.Album
 
 val ALBUM = Album(
     id = "1622045624",

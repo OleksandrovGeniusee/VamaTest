@@ -48,8 +48,8 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.vama.data.common.extensions.dateFromStandardString
 import com.vama.data.common.extensions.monthFirstFormat
 import com.vama.data.mockedData.ALBUM
-import com.vama.data.models.Album
-import com.vama.data.models.Genre
+import com.vama.domain.models.Album
+import com.vama.domain.models.Genre
 import org.koin.androidx.compose.getViewModel
 
 @Composable

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.vamatest.baseClasses.BaseViewModel
-import com.vama.data.models.Album
+import com.vama.domain.models.Album
 import com.vama.domain.AlbumRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

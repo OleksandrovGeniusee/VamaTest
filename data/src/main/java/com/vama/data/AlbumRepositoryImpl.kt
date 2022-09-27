@@ -2,7 +2,7 @@ package com.vama.data
 
 import com.vama.data.albumDataSources.AlbumLocalDataSourceImpl
 import com.vama.data.albumDataSources.AlbumRemoteDataSourceImpl
-import com.vama.data.models.Album
+import com.vama.domain.models.Album
 import com.vama.data.models.toAlbum
 import com.vama.domain.AlbumRepository
 import kotlinx.coroutines.flow.Flow
@@ -20,7 +20,7 @@ class AlbumRepositoryImpl(
 
     override suspend fun getAlbumById(albumId: String): Album? {
         val rmAlbum = localDataSource.getAlbumById(albumId)
-        return rmAlbum?.toAlbum() ?: null
+        return rmAlbum?.toAlbum()
     }
 
     override val albums: Flow<List<Album>>

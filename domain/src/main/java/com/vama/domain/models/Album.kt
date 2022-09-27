@@ -1,4 +1,4 @@
-package com.vama.data.models
+package com.vama.domain.models
 
 data class Album(
     val id: String,

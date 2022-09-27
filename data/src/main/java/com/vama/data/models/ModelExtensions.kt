@@ -2,6 +2,8 @@ package com.vama.data.models
 
 import com.vama.data.models.realm.RMAlbum
 import com.vama.data.models.realm.RMGenre
+import com.vama.domain.models.Album
+import com.vama.domain.models.Genre
 
 fun RMAlbum.toAlbum(): Album = Album(
     id = this.remoteId,

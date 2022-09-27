@@ -1,6 +1,5 @@
 package com.example.vamatest.ui.screens.albumsList
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,7 +23,7 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.vama.data.mockedData.ALBUM
-import com.vama.data.models.Album
+import com.vama.domain.models.Album
 import org.koin.androidx.compose.getViewModel
 
 @ExperimentalMaterial3Api
