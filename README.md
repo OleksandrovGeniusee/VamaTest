@@ -22,3 +22,5 @@ it is updated on the main screen as well. Details screen also shows:
 5. Release date
 6. Copyright info
 7. Button with the ability to navigation to album on browser
+
+[![Watch the video](https://img.youtube.com/vi/ZQRI68Gt2y0/hqdefault.jpg)](https://youtube.com/shorts/ZQRI68Gt2y0)
