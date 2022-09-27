@@ -14,28 +14,28 @@ data class MostPlayedResponse(
 @Serializable
 data class Feed(
     val copyright: String,
-    val results: List<Album>
+    val results: List<AlbumResponse>
 )
 
 @Serializable
-data class Album(
+data class AlbumResponse(
     val id: String,
     val name: String,
     val artistName: String,
     val artworkUrl100: String,
     val releaseDate: String,
     val url: String,
-    val genres: List<Genre>
+    val genres: List<GenreResponse>
 )
 
 @Serializable
-data class Genre(
+data class GenreResponse(
     val genreId: String,
     val name: String,
     val url: String
 )
 
-fun Album.toRMAlbum(copyright: String): RMAlbum = RMAlbum(
+fun AlbumResponse.toRMAlbum(copyright: String): RMAlbum = RMAlbum(
     remoteId = id,
     name = name,
     artistName = artistName,
@@ -46,7 +46,7 @@ fun Album.toRMAlbum(copyright: String): RMAlbum = RMAlbum(
     copyright = copyright
 )
 
-fun List<Genre>.toRealmList(): RealmList<RMGenre> {
+fun List<GenreResponse>.toRealmList(): RealmList<RMGenre> {
     val realmList = realmListOf<RMGenre>()
     forEach {
         realmList.add(
