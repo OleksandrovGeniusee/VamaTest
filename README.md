@@ -23,4 +23,5 @@ it is updated on the main screen as well. Details screen also shows:
 6. Copyright info
 7. Button with the ability to navigation to album on browser
 
+Video is [here](https://github.com/OleksandrovGeniusee/VamaTest/blob/main/device-2022-09-27-113605.webm) or on Youtube below
 [![Watch the video](https://img.youtube.com/vi/ZQRI68Gt2y0/hqdefault.jpg)](https://youtube.com/shorts/ZQRI68Gt2y0)
