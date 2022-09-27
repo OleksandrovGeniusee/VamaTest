@@ -2,12 +2,11 @@ package com.vama.data
 
 import com.vama.data.albumDataSources.AlbumLocalDataSourceImpl
 import com.vama.data.albumDataSources.AlbumRemoteDataSourceImpl
-import com.vama.data.albumDataSources.RealmConfig
-import com.vama.data.models.Album
+import com.vama.domain.models.Album
+import com.vama.data.models.toAlbum
 import com.vama.domain.AlbumRepository
-import io.realm.kotlin.Realm
-import io.realm.kotlin.notifications.ResultsChange
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class AlbumRepositoryImpl(
     private val remoteDataSource: AlbumRemoteDataSourceImpl,
@@ -20,11 +19,12 @@ class AlbumRepositoryImpl(
     }
 
     override suspend fun getAlbumById(albumId: String): Album? {
-        return localDataSource.getAlbumById(albumId)
+        val rmAlbum = localDataSource.getAlbumById(albumId)
+        return rmAlbum?.toAlbum()
     }
 
-    fun albumsFlow(): Flow<ResultsChange<Album>> {
-        val realm: Realm = Realm.open(RealmConfig.REALM)
-        return realm.query(Album::class).find().asFlow()
-    }
+    override val albums: Flow<List<Album>>
+        get() = localDataSource.getAlbums().asFlow().map {
+            it.list.map { rmAlbum -> rmAlbum.toAlbum() }
+        }
 }

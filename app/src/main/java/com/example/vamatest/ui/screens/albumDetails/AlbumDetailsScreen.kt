@@ -22,10 +22,12 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
@@ -42,12 +44,13 @@ import com.example.vamatest.R
 import com.example.vamatest.ui.theme.VamaTestTheme
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsHeight
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.vama.data.common.extensions.dateFromStandardString
 import com.vama.data.common.extensions.monthFirstFormat
 import com.vama.data.mockedData.ALBUM
 import com.vama.domain.models.Album
 import com.vama.domain.models.Genre
 import org.koin.androidx.compose.getViewModel
-import java.util.*
 
 @Composable
 fun AlbumDetailsScreen(albumId: String?, onBackPressed: () -> Unit) {
@@ -65,6 +68,16 @@ fun AlbumDetailsScreen(albumId: String?, onBackPressed: () -> Unit) {
 
 @Composable
 private fun AlbumDetails(album: Album, modifier: Modifier, onBackPressed: () -> Unit) {
+    val systemUiController = rememberSystemUiController()
+    val useDarkIcons = false
+
+    DisposableEffect(systemUiController, useDarkIcons) {
+        systemUiController.setSystemBarsColor(
+            color = Color.Transparent,
+            darkIcons = useDarkIcons
+        )
+        onDispose {}
+    }
     Box(
         modifier = modifier
     ) {
@@ -74,25 +87,23 @@ private fun AlbumDetails(album: Album, modifier: Modifier, onBackPressed: () -> 
             verticalArrangement = Arrangement.Top
         ) {
             AsyncImage(
-                model = album.artworkUrl100(),
+                model = album.artworkUrl100,
                 contentDescription = null,
                 modifier = Modifier.fillMaxWidth()
             )
             ArtistAndAlbumNames(album = album)
-            album.genres()?.let {
-                GenersListView(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .padding(
-                            horizontal = dimensionResource(id = R.dimen.margin_item_space_default),
-                            vertical = dimensionResource(id = R.dimen.margin_item_space_extra_small)
-                        ),
-                    genersList = it
-                )
-            }
+            GenersListView(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .padding(
+                        horizontal = dimensionResource(id = R.dimen.margin_item_space_default),
+                        vertical = dimensionResource(id = R.dimen.margin_item_space_extra_small)
+                    ),
+                genersList = album.genres
+            )
             BottomInfo(album = album)
-            album.albumUrl()?.let { CenteredButton(albumUrl = it) }
+            CenteredButton(albumUrl = album.albumUrl)
             Spacer(
                 modifier = Modifier
                     .navigationBarsHeight()
@@ -143,34 +154,30 @@ private fun CenteredButton(albumUrl: String) {
 
 @Composable
 private fun ArtistAndAlbumNames(album: Album) {
-    album.artistName()?.let {
-        Text(
-            text = it,
-            maxLines = 2,
-            modifier = Modifier.padding(
-                start = dimensionResource(id = R.dimen.margin_item_space_default),
-                end = dimensionResource(id = R.dimen.margin_item_space_default),
-                top = dimensionResource(id = R.dimen.margin_item_space_small)
-            ),
-            style = TextStyle(
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Normal,
-                color = colorResource(id = R.color.album_artist_name_details)
-            )
+    Text(
+        text = album.artistName,
+        maxLines = 2,
+        modifier = Modifier.padding(
+            start = dimensionResource(id = R.dimen.margin_item_space_default),
+            end = dimensionResource(id = R.dimen.margin_item_space_default),
+            top = dimensionResource(id = R.dimen.margin_item_space_small)
+        ),
+        style = TextStyle(
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Normal,
+            color = colorResource(id = R.color.album_artist_name_details)
         )
-    }
-    album.albumName()?.let {
-        Text(
-            text = it,
-            maxLines = 2,
-            modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.margin_item_space_default)),
-            style = TextStyle(
-                fontSize = 34.sp,
-                fontWeight = FontWeight.ExtraBold,
-                color = colorResource(id = R.color.album_name_details)
-            )
+    )
+    Text(
+        text = album.albumName,
+        maxLines = 2,
+        modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.margin_item_space_default)),
+        style = TextStyle(
+            fontSize = 34.sp,
+            fontWeight = FontWeight.ExtraBold,
+            color = colorResource(id = R.color.album_name_details)
         )
-    }
+    )
 }
 
 @Composable
@@ -178,12 +185,10 @@ private fun BottomInfo(album: Album) {
     BottomCommonText(
         stringResource(
             id = R.string.released,
-            album.releaseDate()?.monthFirstFormat() ?: album.release() ?: ""
+            dateFromStandardString(album.release)?.monthFirstFormat() ?: album.release
         )
     )
-    album.copyright()?.let {
-        BottomCommonText(it)
-    }
+    BottomCommonText(album.copyright)
 }
 
 @Composable
@@ -229,16 +234,14 @@ private fun GenerText(gener: Genre) {
             )
             .padding(start = 8.dp, top = 3.dp, end = 8.dp, bottom = 4.dp)
     ) {
-        gener.name()?.let {
-            Text(
-                text = it,
-                style = TextStyle(
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = colorResource(id = R.color.bright_blue)
-                )
+        Text(
+            text = gener.name,
+            style = TextStyle(
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Normal,
+                color = colorResource(id = R.color.bright_blue)
             )
-        }
+        )
     }
 }
 

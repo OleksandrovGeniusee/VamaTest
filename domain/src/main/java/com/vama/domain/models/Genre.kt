@@ -1,10 +1,7 @@
 package com.vama.domain.models
 
-interface Genre {
-
-    fun genreId(): String?
-
-    fun name(): String?
-
-    fun url(): String?
-}
+data class Genre(
+    val id: String,
+    val name: String,
+    val url: String,
+)

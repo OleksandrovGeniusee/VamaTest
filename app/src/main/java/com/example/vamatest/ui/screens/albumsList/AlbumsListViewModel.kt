@@ -3,10 +3,8 @@ package com.example.vamatest.ui.screens.albumsList
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.vamatest.baseClasses.BaseViewModel
-import com.vama.data.AlbumRepositoryImpl
-import com.vama.domain.AlbumRepository
 import com.vama.domain.models.Album
-import kotlinx.coroutines.flow.collectLatest
+import com.vama.domain.AlbumRepository
 
 class AlbumsListViewModel(private val albumRepositoryImpl: AlbumRepository<Album>) :
     BaseViewModel() {
@@ -16,12 +14,15 @@ class AlbumsListViewModel(private val albumRepositoryImpl: AlbumRepository<Album
 
     private var albumsListLiveData: MutableLiveData<List<Album>> = MutableLiveData()
 
-    fun getAlbums() {
+    init {
         launchWithProgress(show = false) {
-            (albumRepositoryImpl as AlbumRepositoryImpl).albumsFlow().collectLatest {
-                albumsListLiveData.postValue(it.list.toList())
+            albumRepositoryImpl.albums.collect {
+                albumsListLiveData.postValue(it)
             }
         }
+    }
+
+    fun updateAlbums() {
         launchWithProgress {
             albumRepositoryImpl.fetchAlbums()
         }

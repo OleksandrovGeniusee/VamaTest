@@ -1,34 +1,34 @@
 package com.vama.data.albumDataSources
 
-import com.vama.data.models.Album
-import com.vama.data.models.Genre
-import com.vama.domain.albumDataSource.AlbumLocalDataSource
+import com.vama.data.models.realm.RMAlbum
+import com.vama.data.models.realm.RMGenre
 import io.realm.kotlin.Realm
+import io.realm.kotlin.RealmConfiguration
+import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.query.RealmResults
 
-class AlbumLocalDataSourceImpl : AlbumLocalDataSource<Album> {
+class AlbumLocalDataSourceImpl(private val config: RealmConfiguration) :
+    AlbumLocalDataSource<RMAlbum> {
 
-    private val config = RealmConfig.REALM
-
-    override suspend fun getAlbums() = Realm.open(config).query(Album::class).find()
+    override fun getAlbums() = Realm.open(config).query(RMAlbum::class).find()
 
     override suspend fun getAlbumById(id: String) =
-        Realm.open(config).query(Album::class, "id = '$id'").find().firstOrNull()
+        Realm.open(config).query(RMAlbum::class, "remoteId = '$id'").find().firstOrNull()
 
-    override suspend fun saveAlbums(items: List<Album>) {
+    override suspend fun saveAlbums(items: List<RMAlbum>) {
         val realm: Realm = Realm.open(config)
 
         realm.writeBlocking {
-            val albums: RealmResults<Album> = this.query(Album::class).find()
+            val albums: RealmResults<RMAlbum> = this.query(RMAlbum::class).find()
             delete(albums)
 
-            val genres: RealmResults<Genre> = this.query(Genre::class).find()
+            val genres: RealmResults<RMGenre> = this.query(RMGenre::class).find()
             delete(genres)
 
             items.forEach {
-                copyToRealm(it)
-                it.genresRespose?.forEach { genre ->
-                    copyToRealm(genre)
+                copyToRealm(it, UpdatePolicy.ALL)
+                it.genres.forEach { genre ->
+                    copyToRealm(genre, UpdatePolicy.ALL)
                 }
             }
         }

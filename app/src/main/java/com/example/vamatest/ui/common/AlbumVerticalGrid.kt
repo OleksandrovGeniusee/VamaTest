@@ -30,7 +30,7 @@ import com.vama.data.mockedData.ALBUM
 import com.vama.domain.models.Album
 
 @Composable
-fun ClickableItemsGrid(
+fun AlbumVerticalGrid(
     modifier: Modifier = Modifier,
     albums: List<Album>,
     cellsInRow: Int = 2,
@@ -68,7 +68,7 @@ private fun AlbumItem(
             }
     ) {
         AsyncImage(
-            model = album.artworkUrl100(),
+            model = album.artworkUrl100,
             contentDescription = null,
             modifier = Modifier.size(dimensionResource(id = R.dimen.album_image_height))
                 .clip(RoundedCornerShape(dimensionResource(id = R.dimen.album_corner_radius)))
@@ -82,28 +82,25 @@ private fun AlbumItem(
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Bottom
         ) {
-            album.albumName()?.let {
-                Text(
-                    text = it,
-                    maxLines = 2,
-                    style = TextStyle(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Normal,
-                        color = colorResource(id = R.color.album_name_list)
-                    )
+            Text(
+                text = album.albumName,
+                maxLines = 2,
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = colorResource(id = R.color.album_name_list)
                 )
-            }
-            album.artistName()?.let {
-                Text(
-                    text = it,
-                    maxLines = 2,
-                    style = TextStyle(
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Normal,
-                        color = colorResource(id = R.color.album_artist_name_list)
-                    )
+            )
+
+            Text(
+                text = album.artistName,
+                maxLines = 2,
+                style = TextStyle(
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = colorResource(id = R.color.album_artist_name_list)
                 )
-            }
+            )
         }
     }
 }
